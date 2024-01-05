@@ -1,3 +1,5 @@
+package entites;
+
 public class Disque {
 
     public Couleur couleur;
