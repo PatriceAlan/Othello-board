@@ -14,7 +14,7 @@ import composants_principaux.Controleur;
 public class Minimax extends Strategie {
 
  // La profondeur de recherche de l'algorithme
- public int depth = 5;
+ public int profondeur = 5;
 
  /**
   * Constructeur de la classe Minimax.
@@ -33,7 +33,7 @@ public class Minimax extends Strategie {
   * @return le plateau après le mouvement
   */
  public Plateau mouvement(Plateau plateau){
-  Plateau plateauSuccesseur = minimax(plateau, 0, depth);
+  Plateau plateauSuccesseur = minimax(plateau, 0, profondeur);
 
   Commande commande = getCommande(plateau, plateauSuccesseur);
   manageur.executionCommande(commande);

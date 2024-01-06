@@ -389,7 +389,8 @@ public class Plateau {
 
 
 	/**
-	 * Compte le nombre de mauvaises cases X occupées par la couleur donnée.
+	 * Compte le nombre de mauvaises cases X occupées par la couleur donnée qui sont à
+	 * proximité d'un coin occupé.
 	 *
 	 * @param couleur la couleur du joueur
 	 * @return le nombre de mauvaises cases X occupées
@@ -442,8 +443,8 @@ public class Plateau {
 
 
 	/**
-	 * Compte le nombre de mauvaises cases C occupées par la couleur donnée.
-	 *
+	 * Compte le nombre de mauvaises cases C occupées par la couleur donnée
+	 * qui ne sont pas à proximité d'un coin occupé.
 	 * @param couleur la couleur du joueur
 	 * @return le nombre de mauvaises cases C occupées
 	 */

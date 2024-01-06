@@ -7,7 +7,7 @@ import java.awt.Point;
  * La classe Boutton étend JButton.
  * Elle représente un bouton avec des coordonnées x et y.
  */
-public class Boutton extends JButton{
+public class Bouton extends JButton{
  // Position x du bouton
  public int xPos;
  // Position y du bouton
@@ -20,7 +20,7 @@ public class Boutton extends JButton{
   * @param xPos la position x du bouton
   * @param yPos la position y du bouton
   */
- public Boutton(int xPos, int yPos){
+ public Bouton(int xPos, int yPos){
   this.xPos = xPos;
   this.yPos = yPos;
  }

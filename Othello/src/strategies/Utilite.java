@@ -81,16 +81,16 @@ public class Utilite {
 
 	/**
 	 * Calcule l'utilité si le jeu est terminé.
-	 * Si le joueur noir a gagné, l'utilité est de 10000.
-	 * Si le joueur blanc a gagné, l'utilité est de -10000.
+	 * Si le joueur noir a gagné, l'utilité est de 1000 (qui ici est un nombre choisi arbitrairement).
+	 * Si le joueur blanc a gagné, l'utilité est de -1000 (qui ici est un nombre choisi arbitrairement).
 	 * Si le jeu est un match nul, l'utilité est de 0.
 	 */
 	public void utiliteJeuTermine(){
 		if (plateau.jeuTermine){
 			if (plateau.gagnant == Couleur.NOIR)
-				value = 10000;
+				value = 1000;
 			else if (plateau.gagnant == Couleur.BLANC)
-				value = -10000;
+				value = -1000;
 			else
 				value = 0;
 		}

@@ -14,7 +14,7 @@ public class Vue {
 	public Controleur controleur;
 	public JFrame frame;
 	public JPanel panel;
-	public Boutton[][] boutton;
+	public Bouton[][] bouton;
 	
 	public int hauteurFrame;
 	public int largeurFrame;
@@ -58,7 +58,7 @@ public class Vue {
 	 * @param controleur le contrôleur du jeu
 	 */
 	public Vue(Plateau plateau, Controleur controleur){
-		boutton = new Boutton[plateau.lignes][plateau.colonnes];
+		bouton = new Bouton[plateau.lignes][plateau.colonnes];
 		hauteurFrame = 739;
 		largeurFrame = 917;
 		largeurPlateau = 600;
@@ -95,7 +95,7 @@ public class Vue {
 		panel = new JPanel(null);
 		for (int lig = 0; lig < plateau.lignes; lig++){
 			for (int col = 0; col < plateau.colonnes; col++){
-				boutton[lig][col] = new Boutton(col, lig);
+				bouton[lig][col] = new Bouton(col, lig);
 			}
 		}
 
@@ -109,20 +109,20 @@ public class Vue {
 				
 
 				Disque disqueActuel = plateau.othellier[lig][col];
-				Boutton bouttonActuel = boutton[lig][col];
+				Bouton boutonActuel = bouton[lig][col];
 				if (disqueActuel.couleur == Couleur.NOIR)
-					bouttonActuel.setIcon(iconeNoir);
+					boutonActuel.setIcon(iconeNoir);
 				else if (disqueActuel.couleur == Couleur.BLANC)
-					bouttonActuel.setIcon(iconeBlanc);
+					boutonActuel.setIcon(iconeBlanc);
 
 				
 
 				int xPositionGUI = getXPositionGUI(col);
 				int yPositionGUI = getYPositionGUI(lig);
-				bouttonActuel.setBounds(xPositionGUI, yPositionGUI, largeurCase, largeurCase);
+				boutonActuel.setBounds(xPositionGUI, yPositionGUI, largeurCase, largeurCase);
 				
-				setFondecran(bouttonActuel);
-				panel.add(bouttonActuel);
+				setFondecran(boutonActuel);
+				panel.add(boutonActuel);
 			}
 		}
 		creationBouttonsInterface(panel);
@@ -141,11 +141,11 @@ public class Vue {
 		for (int lig = 0; lig < plateau.lignes; lig++){
 			for (int col = 0; col < plateau.colonnes; col++){
 				Point pointActuel = new Point(col, lig);
-				Boutton bouttonActuel = boutton[lig][col];
+				Bouton boutonActuel = bouton[lig][col];
 				if (currentJoueur.mouvementsValides.contains(pointActuel))
-					bouttonActuel.setBackground(marronClair);
+					boutonActuel.setBackground(marronClair);
 				else
-					bouttonActuel.setBackground(marronFonce);
+					boutonActuel.setBackground(marronFonce);
 			}
 		}
 	}
@@ -307,13 +307,13 @@ public class Vue {
 		for (int lig = 0; lig < plateau.lignes; lig++){
 			for (int col = 0; col < plateau.colonnes; col++){
 				Disque disqueActuel = plateau.othellier[lig][col];
-				Boutton bouttonActuel = boutton[lig][col];
+				Bouton boutonActuel = bouton[lig][col];
 				if (disqueActuel.couleur == Couleur.NOIR)
-					bouttonActuel.setIcon(iconeNoir);
+					boutonActuel.setIcon(iconeNoir);
 				else if (disqueActuel.couleur == Couleur.BLANC)
-					bouttonActuel.setIcon(iconeBlanc);
+					boutonActuel.setIcon(iconeBlanc);
 				else
-					bouttonActuel.setIcon(null);
+					boutonActuel.setIcon(null);
 			}
 		}
 	}
@@ -338,8 +338,8 @@ public class Vue {
 	}
 	
 
-	public void setFondecran(Boutton boutton){
-		boutton.setBackground(marronFonce);
+	public void setFondecran(Bouton bouton){
+		bouton.setBackground(marronFonce);
 	}
 	
 
@@ -354,13 +354,13 @@ public class Vue {
 	}
 	
 
-	public Boutton getBoutton(Point point){
-		return boutton[point.y][point.x];
+	public Bouton getBoutton(Point point){
+		return bouton[point.y][point.x];
 	}
 	
 
-	public void setIcone(ImageIcon image, Boutton boutton){
-		boutton.setIcon(image);
+	public void setIcone(ImageIcon image, Bouton bouton){
+		bouton.setIcon(image);
 	}
 
 

@@ -85,7 +85,7 @@ public class Controleur {
  public void gestionnaireSouris(){
   for (int i = 0; i < plateau.lignes; i++){
    for (int j = 0; j < plateau.colonnes; j++){
-    vue.gestionnaireSouris(new GestionnaireDisque(this), vue.boutton[i][j]);
+    vue.gestionnaireSouris(new GestionnaireDisque(this), vue.bouton[i][j]);
    }
   }
   vue.gestionnaireSouris(new GestionnaireAnnuler(this), vue.bouttonAnnuler);

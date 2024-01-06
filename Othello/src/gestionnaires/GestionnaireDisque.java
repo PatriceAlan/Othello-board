@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
 
-import composants_principaux.Boutton;
+import composants_principaux.Bouton;
 import composants_principaux.Couleur;
 import composants_principaux.Plateau;
 import composants_principaux.Commande;
@@ -33,9 +33,9 @@ public class GestionnaireDisque extends MouseAdapter {
 	public void mouseClicked(MouseEvent event){
 		if (plateau.tourJoueur != Couleur.NOIR)
 			return;
-		Boutton currentBoutton = (Boutton) event.getSource();
-		if (plateau.getJoueurActuel().mouvementsValides.contains(currentBoutton.creationPoint())){
-			Point destinationPoint = currentBoutton.creationPoint();
+		Bouton currentBouton = (Bouton) event.getSource();
+		if (plateau.getJoueurActuel().mouvementsValides.contains(currentBouton.creationPoint())){
+			Point destinationPoint = currentBouton.creationPoint();
 			Commande commande = new Commande(plateau, controleur.plateau.tourJoueur, destinationPoint);
 			manageur.executionCommande(commande);
 			
