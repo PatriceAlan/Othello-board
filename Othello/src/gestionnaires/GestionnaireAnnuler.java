@@ -9,19 +9,13 @@ import composants_principaux.Manageur;
 import composants_principaux.Controleur;
 import composants_principaux.Vue;
 
-/**
- *
- * Permet au joueur d'annuler son coup
- * @author Peck Patrice Alan
- */
+
 public class GestionnaireAnnuler extends MouseAdapter {
 	public Manageur manageur;
 	public Plateau plateau;
 	public Vue vue;
 	
-	/**
-	 * Constructeur
-	 */
+
 	public GestionnaireAnnuler(Controleur controleur){
 		this.manageur = controleur.manageur;
 		this.plateau = controleur.plateau;
@@ -29,11 +23,11 @@ public class GestionnaireAnnuler extends MouseAdapter {
 	}
 
 	public void mouseClicked(MouseEvent event){
-		if (manageur.undoAvailable()){
+		if (manageur.annulerDisponible()){
 			do{
-				manageur.undo();
-				vue.updateView();
-			}while(plateau.playerTurn == Couleur.WHITE);
+				manageur.annuler();
+				vue.miseAjourVue();
+			}while(plateau.tourJoueur == Couleur.BLANC);
 		}
 		else
 			java.awt.Toolkit.getDefaultToolkit().beep();

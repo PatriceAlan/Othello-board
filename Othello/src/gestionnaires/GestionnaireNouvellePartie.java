@@ -4,25 +4,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import composants_principaux.Controleur;
-import strategies.Difficulty;
+import strategies.Difficulte;
 
-/**
- * Permet au joueur de commencer une nouvelle partie
- * @author Peck Patrice Alan
- */
+
 public class GestionnaireNouvellePartie extends MouseAdapter {
 	public Controleur controleur;
-	public Difficulty difficulty;
+	public Difficulte difficulte;
 	
 
-	public GestionnaireNouvellePartie(Controleur controleur, Difficulty difficulty){
+	public GestionnaireNouvellePartie(Controleur controleur, Difficulte difficulte){
 		this.controleur = controleur;
-		this.difficulty = difficulty;
+		this.difficulte = difficulte;
 	}
 	
 
 	public void mouseClicked(MouseEvent event){
 		javax.swing.JOptionPane.showMessageDialog(null, "Nouvelle partie");
-		controleur.reset(difficulty);
+		controleur.reinitialiser(difficulte);
 	}
 }

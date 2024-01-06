@@ -9,26 +9,20 @@ import java.awt.Point;
  * An extension of JButton. Button knows its Position on the GUI.
  * @author Rodney Shaghoulian
  */
-@SuppressWarnings("serial")
 public class Boutton extends JButton{
-	public int xPos;	///< x Position of Button
-	public int yPos;	///< y Position of Button
+	public int xPos;
+	public int yPos;
 	
-	/**
-	 * Creates a Button given (x,y) coordinates
-	 * @param xPos	x Position of Button
-	 * @param yPos	y Position of Button
-	 */
+
 	public Boutton(int xPos, int yPos){
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
 	
 	/**
-	 * Creates a Point to represent current Button
-	 * @return
-	 */
-	public Point createPoint(){
+	 * Creation d'un boutton
+     */
+	public Point creationPoint(){
 		return new Point(xPos, yPos);
 	}
 }

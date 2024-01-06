@@ -2,60 +2,43 @@ package composants_principaux;
 
 import java.util.Stack;
 
-/**
- * \brief
- * Keeps Commands in Stacks so that we can "redo" and "undo" moves
- * @author Rodney Shaghoulian
- */
+
 public class Manageur {
-	public Stack<Commande> undos = new Stack<Commande>();	///< Commands saved in a Stack in the appropriate order to "undo"
-	public Stack<Commande> redos = new Stack<Commande>();	///< Commands saved in a Stack in the appropriate order to "redo"
+	public Stack<Commande> annuler = new Stack<Commande>();
+	public Stack<Commande> refaire = new Stack<Commande>();
 		
-	/**
-	 * Executes a Command on the current Board
-	 * @param commande	The Command to execute
-	 */
-	public void executeCommand(Commande commande) {
-		commande.execute();
-		undos.push(commande);
-		redos.clear();
+
+	public void executionCommande(Commande commande) {
+		commande.execution();
+		annuler.push(commande);
+		refaire.clear();
 	}
 
-	/**
-	 * Checks to see if an "undo" is available
-	 * @return		true if available. false otherwise
-	 */
-	public boolean undoAvailable() {
-		return !undos.empty();
+
+	public boolean annulerDisponible() {
+		return !annuler.empty();
 	}
 
-	/**
-	 * Undoes the last move (including the computer A.I.'s move)
-	 */
-	public void undo() {
-		if (undoAvailable()){
-			Commande commande = undos.pop();
-			commande.undo();
-			redos.push(commande);
+
+	public void annuler() {
+		if (annulerDisponible()){
+			Commande commande = annuler.pop();
+			commande.annuler();
+			refaire.push(commande);
 		}
 	}
 
-	/**
-	 * Checks to see if a "redo" is available
-	 * @return		true if available. false otherwise
-	 */
-	public boolean redoAvailable() {
-		return !redos.empty();
+
+	public boolean refaireDisponible() {
+		return !refaire.empty();
 	}
 
-	/**
-	 * Redoes the last move
-	 */
-	public void redo() {
-		if (redoAvailable()){
-			Commande commande = redos.pop();
-			commande.execute();
-			undos.push(commande);
+
+	public void refaire() {
+		if (refaireDisponible()){
+			Commande commande = refaire.pop();
+			commande.execution();
+			annuler.push(commande);
 		}
 	}
 }

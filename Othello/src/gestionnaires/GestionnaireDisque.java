@@ -14,10 +14,7 @@ import composants_principaux.Manageur;
 import composants_principaux.Controleur;
 import composants_principaux.Vue;
 
-/**
- * Permet de placer un disque sur le plateau avec une souris
- * @author Peck Patrice Alan
- */
+
 public class GestionnaireDisque extends MouseAdapter {
 	public Controleur controleur;
 	public Plateau plateau;
@@ -34,22 +31,22 @@ public class GestionnaireDisque extends MouseAdapter {
 	
 
 	public void mouseClicked(MouseEvent event){
-		if (plateau.playerTurn != Couleur.BLACK)
+		if (plateau.tourJoueur != Couleur.NOIR)
 			return;
 		Boutton currentBoutton = (Boutton) event.getSource();
-		if (plateau.getCurrentPlayer().validMoves.contains(currentBoutton.createPoint())){
-			Point destinationPoint = currentBoutton.createPoint();
-			Commande commande = new Commande(plateau, controleur.plateau.playerTurn, destinationPoint);
-			manageur.executeCommand(commande);
+		if (plateau.getJoueurActuel().mouvementsValides.contains(currentBoutton.creationPoint())){
+			Point destinationPoint = currentBoutton.creationPoint();
+			Commande commande = new Commande(plateau, controleur.plateau.tourJoueur, destinationPoint);
+			manageur.executionCommande(commande);
 			
-			vue.enableButtons(false);
-			vue.updateView();
+			vue.activerBouttons(false);
+			vue.miseAjourVue();
 		    try{
 		        SwingUtilities.invokeLater(new Runnable(){
 		            public void run(){
-		            	if (!plateau.whiteJoueur.validMoves.isEmpty())
-		    				controleur.computerTurn();
-		            	vue.enableButtons(true);
+		            	if (!plateau.joueurBlanc.mouvementsValides.isEmpty())
+		    				controleur.tourOrdi();
+		            	vue.activerBouttons(true);
 		            }
 		        });
 		    }

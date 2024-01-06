@@ -7,12 +7,9 @@ import java.awt.event.MouseEvent;
 import composants_principaux.Plateau;
 import composants_principaux.Couleur;
 import composants_principaux.Controleur;
-import strategies.Difficulty;
+import strategies.Difficulte;
 
-/**
- * \ Permet d'abandonner la partie
- * @author Peck Patrice Alan
- */
+
 public class GestionnaireAbandon extends MouseAdapter {
 	public Controleur controleur;
 	public Plateau plateau;
@@ -26,14 +23,14 @@ public class GestionnaireAbandon extends MouseAdapter {
 	}
 
 	public void mouseClicked(MouseEvent event){
-		if (plateau.playerTurn == Couleur.BLACK){
+		if (plateau.tourJoueur == Couleur.NOIR){
 			javax.swing.JOptionPane.showMessageDialog(null, "Abandon du joueur noir. Blanc gagne!");
-			controleur.whiteGamesWon++;
+			controleur.victoiresBlanc++;
 		}
 		else{
 			javax.swing.JOptionPane.showMessageDialog(null, "Abandon du joueur blanc. Noir gagne!");
-			controleur.blackGamesWon++;
+			controleur.victoiresNoir++;
 		}
-		controleur.reset(Difficulty.EASY);
+		controleur.reinitialiser(Difficulte.FACILE);
 	}
 }

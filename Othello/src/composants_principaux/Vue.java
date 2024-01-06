@@ -1,406 +1,337 @@
 package composants_principaux;
 
 import javax.swing.*;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseListener;
 
-/**
- * \brief
- * The "View" for MVC (Model - View - Controller)
- * @author Rodney Shaghoulian
- */
+
 public class Vue {
-	public Plateau plateau;					///< The View has access to the Board
-	public Controleur controleur;		///< The View has access to the Controller
-	public JFrame frame;				///< We will put a JPanel (which contains NxN JButtons) on this
-	public JPanel panel;				///< Will add NxN Buttons to this panel, and add the JPanel to the JFrame
-	public Boutton[][] boutton;			///< NxN Buttons on Panel
+	public Plateau plateau;
+	public Controleur controleur;
+	public JFrame frame;
+	public JPanel panel;
+	public Boutton[][] boutton;
 	
-	public int frameHeight;				///< Picked to make a square JFrame of ~600 pixels.
-	public int frameWidth;				///< Picked to make a square JFrame of ~600 pixels.
-	public int boardWidth; 				///< Approximate number of Pixels on square board
-	public int squareLength;			///< length of square's edge that a Disk can be placed on
+	public int hauteurFrame;
+	public int largeurFrame;
+	public int largeurPlateau;
+	public int largeurCase;
 	
-	public JButton undoButton;			///< Allows for undoing a Disk placement
-	public JButton redoButton;			///< Allows for redoing a Disk placement
+	public JButton bouttonAnnuler;
+	public JButton bouttonRefaire;
 
-	public JTextField whiteName;		///< Used to display unique name for WHITE Player
-	public JTextField blackName;		///< Used to display unique name for BLACK Player
+	public JTextField nomBlanc;
+	public JTextField nomNoir;
 	
-	public JTextField whiteNumWins;		///< Used to display number of games WHITE has won
-	public JTextField blackNumWins;		///< Used to display number of games BLACK has won
+	public JTextField victoiresBlanc;
+	public JTextField victoiresNoir;
 	
-	public JTextField whiteNumDisks;	///< Used to display number of Disks WHITE has on Board
-	public JTextField blackNumDisks;	///< Used to display number of Disks BLACK has on Board
+	public JTextField disquesBlanc;
+	public JTextField disquesNoir;
 	
-	public JButton whiteForfeit;		///< Used to give WHITE the option of forfeiting a game
-	public JButton blackForfeit;		///< Used to give BLACK the option of forfeiting a game
+	public JButton abandonBlanc;
+	public JButton abandonNoir;
 
-	public JButton newGameEasy;			///< Used to create a new game with difficulty = EASY
-	public JButton newGameMedium;		///< Used to create a new game with difficulty = MEDIUM
-	public JButton newGameHard;			///< Used to create a new game with difficulty = HARD
+	public JButton nouvellePartieFacile;
+	public JButton nouvellePartieMoyenne;
+	public JButton nouvellePartieDifficile;
 
-	public ImageIcon blackIcon;			///< picture of Black Disk
-	public ImageIcon whiteIcon;			///< picture of White Disk
+	public ImageIcon iconeNoir;
+	public ImageIcon iconeBlanc;
 	
-	public JTextField difficultyText;	///< Displays difficulty level of A.I.
+	public JTextField texteDifficulte;
 	
-	java.awt.Color green;				///< Color of NxN Board Buttons
-	java.awt.Color lightGreen;			///< Color used for highlighting moves
+	java.awt.Color marronFonce;
+
+	java.awt.Color marronClair;
 	
-	/**
-	 * Creates a "View" GUI from a Board
-	 * @param plateau 		The Board to create a GUI from (Using each Disk)
-	 * @param controleur	The controller in MVC
-	 */
+
 	public Vue(Plateau plateau, Controleur controleur){
-		boutton = new Boutton[plateau.rows][plateau.columns];
-		frameHeight = 739;
-		frameWidth = 917;
-		boardWidth = 600;
-		squareLength = boardWidth / plateau.rows;
+		boutton = new Boutton[plateau.lignes][plateau.colonnes];
+		hauteurFrame = 739;
+		largeurFrame = 917;
+		largeurPlateau = 600;
+		largeurCase = largeurPlateau / plateau.lignes;
 
-		green = new java.awt.Color(0, 100, 0);
-		lightGreen = new java.awt.Color(0, 200, 0);
 
-		frame = new JFrame("Othello - tbPony");
-		blackIcon = new ImageIcon("images/black_disk.png");
-		whiteIcon = new ImageIcon("images/white_disk.png");
+
+		marronFonce = new Color(102, 51, 0);
+
+
+		marronClair = new Color(153, 102, 51);
+
+
+
+		frame = new JFrame("Othello - PatriceAlan");
+		iconeNoir = new ImageIcon("images/black_disk.png");
+		iconeBlanc = new ImageIcon("images/white_disk.png");
 		
-		initialize(plateau, controleur);
+		initialisation(plateau, controleur);
 	}
 	
-	/**
-	 * Initializes the View given a Board and Controller
-	 * @param plateau			The "Model" that we are initializing the View from
-	 * @param controleur	The "Controller" we will use for event listening
-	 */
-	public void initialize(Plateau plateau, Controleur controleur){
+
+	public void initialisation(Plateau plateau, Controleur controleur){
 		this.plateau = plateau;
 		this.controleur = controleur;
 		
-		/* Initializes Swing Variables */
+
 		panel = new JPanel(null);
-		for (int row = 0; row < plateau.rows; row++){
-			for (int column = 0; column < plateau.columns; column++){
-				boutton[row][column] = new Boutton(column, row);
+		for (int lig = 0; lig < plateau.lignes; lig++){
+			for (int col = 0; col < plateau.colonnes; col++){
+				boutton[lig][col] = new Boutton(col, lig);
 			}
 		}
-		/* Set up JFrame */
-		frame.setSize(frameWidth, frameHeight);
-		frame.setLocationRelativeTo(null);						//null places window in center of screen
+
+		frame.setSize(largeurFrame, hauteurFrame);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		/* Loop through board - Create NxN Buttons. Add them to the JPanel */
-		for (int row = 0; row < plateau.rows; row++){
-			for (int column = 0; column < plateau.columns; column++){
+
+		for (int lig = 0; lig < plateau.lignes; lig++){
+			for (int col = 0; col < plateau.colonnes; col++){
 				
-				/* Create Buttons */
-				Disque currentDisque = plateau.tile[row][column];
-				Boutton currentBoutton = boutton[row][column];
-				if (currentDisque.couleur == Couleur.BLACK)
-					currentBoutton.setIcon(blackIcon);
-				else if (currentDisque.couleur == Couleur.WHITE)
-					currentBoutton.setIcon(whiteIcon);
-				//currentButton.setIcon(currentDisk.image);
+
+				Disque disqueActuel = plateau.othellier[lig][col];
+				Boutton bouttonActuel = boutton[lig][col];
+				if (disqueActuel.couleur == Couleur.NOIR)
+					bouttonActuel.setIcon(iconeNoir);
+				else if (disqueActuel.couleur == Couleur.BLANC)
+					bouttonActuel.setIcon(iconeBlanc);
+
 				
-				/* Set bounds for the Button */
-				int xPositionGUI = getXPositionGUI(column);
-				int yPositionGUI = getYPositionGUI(row);
-				currentBoutton.setBounds(xPositionGUI, yPositionGUI, squareLength, squareLength);
+
+				int xPositionGUI = getXPositionGUI(col);
+				int yPositionGUI = getYPositionGUI(lig);
+				bouttonActuel.setBounds(xPositionGUI, yPositionGUI, largeurCase, largeurCase);
 				
-				setBackground(currentBoutton);
-				panel.add(currentBoutton);
+				setFondecran(bouttonActuel);
+				panel.add(bouttonActuel);
 			}
 		}
-		createInterfaceButtons(panel);
-		updateView();
+		creationBouttonsInterface(panel);
+		miseAjourVue();
 		
-		frame.setContentPane(panel);	//add the JPanel to the JFrame
+		frame.setContentPane(panel);
 		frame.setVisible(true);
 	}
 	
-	/**
-	 * Colors the backgrounds of valid moves for a player
-	 */
-	public void highlightMoves(){
-		Joueur currentJoueur = plateau.getCurrentPlayer();
-		for (int row = 0; row < plateau.rows; row++){
-			for (int col = 0; col < plateau.columns; col++){
-				Point currentPoint = new Point(col, row);
-				Boutton currentBoutton = boutton[row][col];
-				if (currentJoueur.validMoves.contains(currentPoint))
-					currentBoutton.setBackground(lightGreen);
+
+	public void eclairerMouvements(){
+		Joueur currentJoueur = plateau.getJoueurActuel();
+		for (int lig = 0; lig < plateau.lignes; lig++){
+			for (int col = 0; col < plateau.colonnes; col++){
+				Point pointActuel = new Point(col, lig);
+				Boutton bouttonActuel = boutton[lig][col];
+				if (currentJoueur.mouvementsValides.contains(pointActuel))
+					bouttonActuel.setBackground(marronClair);
 				else
-					currentBoutton.setBackground(green);
+					bouttonActuel.setBackground(marronFonce);
 			}
 		}
 	}
 	
-	/**
-	 * Create the JButtons, Buttons, and JTextFields for the View
-	 * @param panel		The panel we are attaching the buttons to
-	 */
-	public void createInterfaceButtons(JPanel panel){
-		createNames(panel);
-		createWins(panel);
+
+	public void creationBouttonsInterface(JPanel panel){
+		creationNoms(panel);
+		creationVictoires(panel);
 		createNumDisks(panel);
-		createUndoButton(panel);
-		createRedoButton(panel);
-		createForfeitButtons(panel);
+		creationBouttonAnnuler(panel);
+		creationBouttonRefaire(panel);
+		cerationBouttonAbandon(panel);
 		createNewGameButtons(panel);
-		createDifficultyText(panel);
+		creationTexteDifficulte(panel);
 	}
 	
-	/**
-	 * Creates unique names (JTextfields) for BLACK and WHITE
-	 * @param panel		The panel to attach the JTextFields to
-	 */
-	public void createNames(JPanel panel){
-		blackName = new JTextField("Black Player");
-		blackName.setBounds(650, 20, 200, 40);
-		blackName.setBackground(null);
-		blackName.setBorder(null);
-		blackName.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(blackName);
-		whiteName = new JTextField("White Player");
-		whiteName.setBounds(650, 540, 200, 40);
-		whiteName.setBackground(green);
-		whiteName.setBorder(null);
-		whiteName.setHorizontalAlignment(SwingConstants.CENTER);
-		panel.add(whiteName);
+
+	public void creationNoms(JPanel panel){
+		nomNoir = new JTextField("Joueur Noir");
+		nomNoir.setBounds(650, 20, 200, 40);
+		nomNoir.setBackground(null);
+		nomNoir.setBorder(null);
+		nomNoir.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(nomNoir);
+		nomBlanc = new JTextField("Joueur Blanc");
+		nomBlanc.setBounds(650, 540, 200, 40);
+		nomBlanc.setBackground(marronFonce);
+		nomBlanc.setBorder(null);
+		nomBlanc.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(nomBlanc);
 	}
 	
-	/**
-	 * Creates number of wins for BLACK and WHITE
-	 * @param panel		The panel to attach the JTextFields to
-	 */
-	public void createWins(JPanel panel){
-		whiteNumWins = new JTextField("White # of Wins: " + controleur.whiteGamesWon);
-		whiteNumWins.setBounds(610, 500, 100, 40);
-		whiteNumWins.setEditable(false);
-		whiteNumWins.setBorder(null);
-		panel.add(whiteNumWins);
-		blackNumWins = new JTextField("Black # of Wins: " + controleur.blackGamesWon);
-		blackNumWins.setBounds(610, 60, 100, 40);
-		blackNumWins.setBorder(null);
-		blackNumWins.setEditable(false);
-		panel.add(blackNumWins);
+
+	public void creationVictoires(JPanel panel){
+		victoiresBlanc = new JTextField("Blanc # Victoires: " + controleur.victoiresBlanc);
+		victoiresBlanc.setBounds(610, 500, 100, 40);
+		victoiresBlanc.setEditable(false);
+		victoiresBlanc.setBorder(null);
+		panel.add(victoiresBlanc);
+		victoiresNoir = new JTextField("Noir # Victoires: " + controleur.victoiresNoir);
+		victoiresNoir.setBounds(610, 60, 100, 40);
+		victoiresNoir.setBorder(null);
+		victoiresNoir.setEditable(false);
+		panel.add(victoiresNoir);
 	}
 	
-	/**
-	 * Creates number of points for BLACK and WHITE
-	 * @param panel		The panel to attach the JTextFields to
-	 */
+
 	public void createNumDisks(JPanel panel){
-		whiteNumDisks = new JTextField("White Disks: " + plateau.whiteJoueur.score);
-		whiteNumDisks.setBounds(610, 470, 100, 40);
-		whiteNumDisks.setEditable(false);
-		whiteNumDisks.setBorder(null);
-		panel.add(whiteNumDisks);
-		blackNumDisks = new JTextField("Black Disks: " + plateau.blackJoueur.score);
-		blackNumDisks.setBounds(610, 90, 100, 40);
-		blackNumDisks.setBorder(null);
-		blackNumDisks.setEditable(false);
-		panel.add(blackNumDisks);
+		disquesBlanc = new JTextField("Disques Blancs: " + plateau.joueurBlanc.score);
+		disquesBlanc.setBounds(610, 470, 100, 40);
+		disquesBlanc.setEditable(false);
+		disquesBlanc.setBorder(null);
+		panel.add(disquesBlanc);
+		disquesNoir = new JTextField("Disques Noirs: " + plateau.joueurNoir.score);
+		disquesNoir.setBounds(610, 90, 100, 40);
+		disquesNoir.setBorder(null);
+		disquesNoir.setEditable(false);
+		panel.add(disquesNoir);
 	}
 	
-	/**
-	 * Creates an "Undo" JButton that lets us undo our previous move
-	 * @param panel		The panel to attach the JTextFields to
-	 */
-	public void createUndoButton(JPanel panel){
-		undoButton = new JButton("Undo");
-		undoButton.setBounds(630, 250, 100, 40);
-		panel.add(undoButton);
+
+	public void creationBouttonAnnuler(JPanel panel){
+		bouttonAnnuler = new JButton("Annuler");
+		bouttonAnnuler.setBounds(630, 250, 100, 40);
+		panel.add(bouttonAnnuler);
 	}
 	
-	/**
-	 * Creates a "Redo" JButton that lets us redo our previous move
-	 * @param panel		The panel to attach the JTextFields to
-	 */
-	public void createRedoButton(JPanel panel){
-		redoButton = new JButton("Redo");
-		redoButton.setBounds(630, 310, 100, 40);
-		panel.add(redoButton);
+
+	public void creationBouttonRefaire(JPanel panel){
+		bouttonRefaire = new JButton("Refaire");
+		bouttonRefaire.setBounds(630, 310, 100, 40);
+		panel.add(bouttonRefaire);
 	}
 	
-	/**
-	 * Creates a "Forfeit" JButton that lets a Player resign from a game and take a loss
-	 * @param panel		The panel to attach the JTextFields to
-	 */
-	public void createForfeitButtons(JPanel panel){
-		whiteForfeit = new JButton("White Forfeit");
-		whiteForfeit.setBounds(720, 485, 150, 30);
-		panel.add(whiteForfeit);
-		blackForfeit = new JButton("Black Forfeit");
-		blackForfeit.setBounds(720, 85, 150, 30);
-		panel.add(blackForfeit);	
+
+	public void cerationBouttonAbandon(JPanel panel){
+		abandonBlanc = new JButton("Blanc abandonne");
+		abandonBlanc.setBounds(720, 485, 150, 30);
+		panel.add(abandonBlanc);
+		abandonNoir = new JButton("Noir abandonne");
+		abandonNoir.setBounds(720, 85, 150, 30);
+		panel.add(abandonNoir);
 	}
 	
-	/**
-	 * Creates JButton that lets a Player start a new game
-	 * @param panel		The panel to attach the JButton to
-	 */
+
 	public void createNewGameButtons(JPanel panel){
-		newGameEasy = new JButton("New Game - EASY");
-		newGameEasy.setBounds(10, 660, 180, 30);
-		panel.add(newGameEasy);
-		newGameMedium = new JButton("New Game - MEDIUM");
-		newGameMedium.setBounds(210, 660, 180, 30);
-		panel.add(newGameMedium);
-		newGameHard = new JButton("New Game - HARD");
-		newGameHard.setBounds(410, 660, 180, 30);
-		panel.add(newGameHard);
+		nouvellePartieFacile = new JButton("Nouvelle partie - FACILE");
+		nouvellePartieFacile.setBounds(10, 660, 180, 30);
+		panel.add(nouvellePartieFacile);
+		nouvellePartieMoyenne = new JButton("Nouvelle partie - Moyenne");
+		nouvellePartieMoyenne.setBounds(210, 660, 180, 30);
+		panel.add(nouvellePartieMoyenne);
+		nouvellePartieDifficile = new JButton("Nouvelle partie - Difficile");
+		nouvellePartieDifficile.setBounds(410, 660, 180, 30);
+		panel.add(nouvellePartieDifficile);
 	}
 	
-	/**
-	 * Creates text field showing difficulty of A.I.
-	 * @param panel
-	 */
-	public void createDifficultyText(JPanel panel){
-		difficultyText = new JTextField("Difficulty: " + controleur.difficulty);
-		difficultyText.setBounds(257, 600, 100, 40);
-		difficultyText.setEditable(false);
-		difficultyText.setBorder(null);
-		panel.add(difficultyText);
+
+	public void creationTexteDifficulte(JPanel panel){
+		texteDifficulte = new JTextField("Difficulté: " + controleur.difficulte);
+		texteDifficulte.setBounds(257, 600, 100, 40);
+		texteDifficulte.setEditable(false);
+		texteDifficulte.setBorder(null);
+		panel.add(texteDifficulte);
 	}
 	
-	/**
-	 * Updates the status of JButtons, Buttons, and JTextFields on current View
-	 */
-	public void updateView(){
-		updateTurnVisuals();
-		updateGameEndView();
-		updateIcons();
-		updateNumDisks();
-		highlightMoves();
+
+	public void miseAjourVue(){
+		miseAJourVisuelTours();
+		miseAJourJeuTermine();
+		miseAJourIcones();
+		miseAjourDisques();
+		eclairerMouvements();
 	}
 	
-	/**
-	 * Visually shows whose turn it is by highlighting that Player's name.
-	 */
-	public void updateTurnVisuals(){
-		if (plateau.playerTurn == Couleur.WHITE){
-			blackName.setBackground(null);
-			whiteName.setBackground(lightGreen);
-			whiteForfeit.setEnabled(true);
-			blackForfeit.setEnabled(false);
+
+	public void miseAJourVisuelTours(){
+		if (plateau.tourJoueur == Couleur.BLANC){
+			nomNoir.setBackground(null);
+			nomBlanc.setBackground(marronClair);
+			abandonBlanc.setEnabled(true);
+			abandonNoir.setEnabled(false);
 		}
 		else{
-			blackName.setBackground(lightGreen);
-			whiteName.setBackground(null);
-			whiteForfeit.setEnabled(false);
-			blackForfeit.setEnabled(true);
+			nomNoir.setBackground(marronClair);
+			nomBlanc.setBackground(null);
+			abandonBlanc.setEnabled(false);
+			abandonNoir.setEnabled(true);
 		}
 	}
 	
-	/**
-	 * Displays a message if game is over
-	 */
-	public void updateGameEndView(){
-		if (plateau.gameEnded == true){
-			if (plateau.winner == Couleur.WHITE){
-				javax.swing.JOptionPane.showMessageDialog(null, "White Wins!");
-				controleur.whiteGamesWon++;
+
+	public void miseAJourJeuTermine(){
+		if (plateau.jeuTermine){
+			if (plateau.gagnant == Couleur.BLANC){
+				javax.swing.JOptionPane.showMessageDialog(null, "Victoire des blancs!");
+				controleur.victoiresBlanc++;
 			}
-			else if (plateau.winner == Couleur.BLACK){
-				javax.swing.JOptionPane.showMessageDialog(null, "Black Wins!");
-				controleur.blackGamesWon++;
+			else if (plateau.gagnant == Couleur.NOIR){
+				javax.swing.JOptionPane.showMessageDialog(null, "Victoire des noirs!");
+				controleur.victoiresNoir++;
 			}
 			else
-				javax.swing.JOptionPane.showMessageDialog(null, "Tie Game!");
-			enableButtons(false);	
+				javax.swing.JOptionPane.showMessageDialog(null, "Match nul!");
+			activerBouttons(false);
 		}
 	}
 	
-	/**
-	 * Updates all icons on the Board
-	 */
-	public void updateIcons(){
-		for (int row = 0; row < plateau.rows; row++){
-			for (int column = 0; column < plateau.columns; column++){
-				Disque currentDisque = plateau.tile[row][column];
-				Boutton currentBoutton = boutton[row][column];
-				if (currentDisque.couleur == Couleur.BLACK)
-					currentBoutton.setIcon(blackIcon);
-				else if (currentDisque.couleur == Couleur.WHITE)
-					currentBoutton.setIcon(whiteIcon);
+
+	public void miseAJourIcones(){
+		for (int lig = 0; lig < plateau.lignes; lig++){
+			for (int col = 0; col < plateau.colonnes; col++){
+				Disque disqueActuel = plateau.othellier[lig][col];
+				Boutton bouttonActuel = boutton[lig][col];
+				if (disqueActuel.couleur == Couleur.NOIR)
+					bouttonActuel.setIcon(iconeNoir);
+				else if (disqueActuel.couleur == Couleur.BLANC)
+					bouttonActuel.setIcon(iconeBlanc);
 				else
-					currentBoutton.setIcon(null);
+					bouttonActuel.setIcon(null);
 			}
 		}
 	}
 	
-	/**
-	 * Updates the JButtons for number of disks for each player
-	 */
-	public void updateNumDisks(){
-		whiteNumDisks.setText("White Disks: " + plateau.whiteJoueur.score);
-		blackNumDisks.setText("Black Disks: " + plateau.blackJoueur.score);
+
+	public void miseAjourDisques(){
+		disquesBlanc.setText("Disques Blancs: " + plateau.joueurBlanc.score);
+		disquesNoir.setText("Disques Noirs: " + plateau.joueurNoir.score);
 	}
 	
-	/**
-	 * Disables clicking of buttons (except New Game Button)
-	 */
-	public void enableButtons(Boolean enable){
-		redoButton.setEnabled(enable);
-		undoButton.setEnabled(enable);
-		blackForfeit.setEnabled(enable);
-		whiteForfeit.setEnabled(enable);
+
+	public void activerBouttons(Boolean activer){
+		bouttonRefaire.setEnabled(activer);
+		bouttonAnnuler.setEnabled(activer);
+		abandonNoir.setEnabled(activer);
+		abandonBlanc.setEnabled(activer);
 	}
 	
-	/** 
-	 * Create a green background by painting Button green
-	 * @param currentButton		The Button we want to set the background color for
-	 */
-	public void setBackground(Boutton boutton){
-		boutton.setBackground(green);
+
+	public void setFondecran(Boutton boutton){
+		boutton.setBackground(marronFonce);
 	}
 	
-	/**
-	 * Calculates "x" Position on GUI for Disk
-	 * @param x 	the "x" position on Board
-	 * @return 		the "x" coordinate on the GUI from 0 to "viewablePixels"
-	 */	
+
 	public int getXPositionGUI(int x){
-		return x * squareLength;
+		return x * largeurCase;
 	}
 	
-	/**
-	 * Calculates "y" Position on GUI for Disk
-	 * @param y 	the "y" Position on Board
-	 * @return 		the "y" coordinate on the GUI from 0 to "viewablePixels"
-	 */	
+
 	public int getYPositionGUI(int y){
-		int yOffset = squareLength;
-		return boardWidth - (y * squareLength) - yOffset;
+		int yOffset = largeurCase;
+		return largeurPlateau - (y * largeurCase) - yOffset;
 	}
 	
-	/** 
-	 * Returns the Button at desired Point
-	 * @param button	Point of desired Button
-	 * @return			Button corresponding to Disk at Point
-	 */
-	public Boutton getButton(Point point){
+
+	public Boutton getBoutton(Point point){
 		return boutton[point.y][point.x];
 	}
 	
-	/**
-	 * Updates the ImageIcon for a Button
-	 * @param image		Our new desired ImageIcon
-	 * @param boutton	The Button to update with a new Image
-	 */
-	public void setIcon(ImageIcon image, Boutton boutton){
+
+	public void setIcone(ImageIcon image, Boutton boutton){
 		boutton.setIcon(image);
 	}
 	
-	/**
-	 * Adds a MouseListener to a JButton
-	 * @param mouseListener		MouseListener to add (to a Button)
-	 * @param button			JButton to add a MouseListener to
-	 */
-	public void addMouseListener(MouseListener mouseListener, JButton button){
-		button.addMouseListener(mouseListener);
+
+	public void gestionnaireSouris(MouseListener mouseListener, JButton boutton){
+		boutton.addMouseListener(mouseListener);
 	}
 }
