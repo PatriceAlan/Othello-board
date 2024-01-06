@@ -63,9 +63,9 @@ public class Vue {
 
 
 		frame = new JFrame("Othello - PatriceAlan");
-		iconeNoir = new ImageIcon("images/black_disk.png");
-		iconeBlanc = new ImageIcon("images/white_disk.png");
-		
+		iconeNoir = new ImageIcon(getClass().getResource("images/disque_noir.png"));
+		iconeBlanc = new ImageIcon(getClass().getResource("images/disque_blanc.png"));
+
 		initialisation(plateau, controleur);
 	}
 	
