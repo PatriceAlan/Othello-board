@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 
 
+/**
+ * La classe Vue représente la vue du jeu.
+ * Elle contient des éléments d'interface utilisateur tels que le plateau de jeu, les boutons, les champs de texte, etc.
+ */
 public class Vue {
 	public Plateau plateau;
 	public Controleur controleur;
@@ -44,8 +48,15 @@ public class Vue {
 	java.awt.Color marronFonce;
 
 	java.awt.Color marronClair;
-	
 
+
+	/**
+	 * Constructeur de la classe Vue.
+	 * Initialise la vue avec le plateau et le contrôleur donnés.
+	 *
+	 * @param plateau le plateau de jeu
+	 * @param controleur le contrôleur du jeu
+	 */
 	public Vue(Plateau plateau, Controleur controleur){
 		boutton = new Boutton[plateau.lignes][plateau.colonnes];
 		hauteurFrame = 739;
@@ -68,8 +79,14 @@ public class Vue {
 
 		initialisation(plateau, controleur);
 	}
-	
 
+
+	/**
+	 * Initialise la vue avec le plateau et le contrôleur donnés.
+	 *
+	 * @param plateau le plateau de jeu
+	 * @param controleur le contrôleur du jeu
+	 */
 	public void initialisation(Plateau plateau, Controleur controleur){
 		this.plateau = plateau;
 		this.controleur = controleur;
@@ -114,8 +131,11 @@ public class Vue {
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 	}
-	
 
+
+	/**
+	 * Met en évidence les mouvements valides pour le joueur actuel.
+	 */
 	public void eclairerMouvements(){
 		Joueur currentJoueur = plateau.getJoueurActuel();
 		for (int lig = 0; lig < plateau.lignes; lig++){
@@ -129,8 +149,13 @@ public class Vue {
 			}
 		}
 	}
-	
 
+
+	/**
+	 * Crée les boutons de l'interface utilisateur.
+	 *
+	 * @param panel le panneau sur lequel ajouter les boutons
+	 */
 	public void creationBouttonsInterface(JPanel panel){
 		creationNoms(panel);
 		creationVictoires(panel);
@@ -141,7 +166,7 @@ public class Vue {
 		createNewGameButtons(panel);
 		creationTexteDifficulte(panel);
 	}
-	
+
 
 	public void creationNoms(JPanel panel){
 		nomNoir = new JTextField("Joueur Noir");
@@ -157,7 +182,7 @@ public class Vue {
 		nomBlanc.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(nomBlanc);
 	}
-	
+
 
 	public void creationVictoires(JPanel panel){
 		victoiresBlanc = new JTextField("Blanc # Victoires: " + controleur.victoiresBlanc);
@@ -222,7 +247,7 @@ public class Vue {
 		nouvellePartieDifficile.setBounds(410, 660, 180, 30);
 		panel.add(nouvellePartieDifficile);
 	}
-	
+
 
 	public void creationTexteDifficulte(JPanel panel){
 		texteDifficulte = new JTextField("Difficulté: " + controleur.difficulte);
@@ -231,8 +256,11 @@ public class Vue {
 		texteDifficulte.setBorder(null);
 		panel.add(texteDifficulte);
 	}
-	
 
+
+	/**
+	 * Met à jour la vue en fonction de l'état actuel du jeu.
+	 */
 	public void miseAjourVue(){
 		miseAJourVisuelTours();
 		miseAJourJeuTermine();
@@ -295,8 +323,13 @@ public class Vue {
 		disquesBlanc.setText("Disques Blancs: " + plateau.joueurBlanc.score);
 		disquesNoir.setText("Disques Noirs: " + plateau.joueurNoir.score);
 	}
-	
 
+
+	/**
+	 * Active ou désactive les boutons de l'interface utilisateur.
+	 *
+	 * @param activer vrai pour activer les boutons, faux pour les désactiver
+	 */
 	public void activerBouttons(Boolean activer){
 		bouttonRefaire.setEnabled(activer);
 		bouttonAnnuler.setEnabled(activer);
@@ -329,8 +362,14 @@ public class Vue {
 	public void setIcone(ImageIcon image, Boutton boutton){
 		boutton.setIcon(image);
 	}
-	
 
+
+	/**
+	 * Ajoute un gestionnaire de souris à un bouton.
+	 *
+	 * @param mouseListener le gestionnaire de souris à ajouter
+	 * @param boutton le bouton auquel ajoute le gestionnaire de souris
+	 */
 	public void gestionnaireSouris(MouseListener mouseListener, JButton boutton){
 		boutton.addMouseListener(mouseListener);
 	}

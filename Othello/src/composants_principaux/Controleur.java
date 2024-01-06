@@ -10,109 +10,144 @@ import strategies.AlphaBeta;
 import strategies.Difficulte;
 import strategies.StrategieAleatoire;
 
-
+/**
+ * La classe Controleur gère le jeu, y compris l'initialisation, la réinitialisation et le tour de l'ordinateur.
+ */
 public class Controleur {
-	public Plateau plateau;
-	public Manageur manageur;
+ // Le plateau de jeu
+ public Plateau plateau;
+ // Le gestionnaire de commandes
+ public Manageur manageur;
 
-	public Vue vue;
-	public int victoiresBlanc = 0;
-	public int victoiresNoir = 0;
-	public int lignes;
-	public int colonnes;
+ // La vue du jeu
+ public Vue vue;
+ // Le nombre de victoires du joueur blanc
+ public int victoiresBlanc = 0;
+ // Le nombre de victoires du joueur noir
+ public int victoiresNoir = 0;
+ // Le nombre de lignes du plateau
+ public int lignes;
+ // Le nombre de colonnes du plateau
+ public int colonnes;
 
-	public Difficulte difficulte;
-	
+ // La difficulté du jeu
+ public Difficulte difficulte;
 
-	public Controleur(int lignes, int colonnes, Difficulte difficulte) {
-		this.lignes = lignes;
-		this.colonnes = colonnes;
-		this.difficulte = difficulte;
-		initialisationVariables();
-		vue = new Vue(plateau, this);
-		gestionnaireSouris();
-	}
-	
-	public void reinitialiser(){
-		initialisationVariables();
-		vue.initialisation(plateau, this);
-		gestionnaireSouris();
-	}
-	
+ /**
+  * Constructeur de la classe Controleur.
+  * Initialise les variables et la vue.
+  *
+  * @param lignes le nombre de lignes du plateau
+  * @param colonnes le nombre de colonnes du plateau
+  * @param difficulte la difficulté du jeu
+  */
+ public Controleur(int lignes, int colonnes, Difficulte difficulte) {
+  this.lignes = lignes;
+  this.colonnes = colonnes;
+  this.difficulte = difficulte;
+  initialisationVariables();
+  vue = new Vue(plateau, this);
+  gestionnaireSouris();
+ }
 
-	public void reinitialiser(Difficulte difficulte){
-		this.difficulte = difficulte;
-		initialisationVariables();
-		vue.initialisation(plateau, this);
-		gestionnaireSouris();
-	}
-	
+ /**
+  * Réinitialise le jeu.
+  */
+ public void reinitialiser(){
+  initialisationVariables();
+  vue.initialisation(plateau, this);
+  gestionnaireSouris();
+ }
 
-	public void initialisationVariables(){
-		plateau = new Plateau(lignes, colonnes);
-		manageur = new Manageur();
-	}
-	
+ /**
+  * Réinitialise le jeu avec une nouvelle difficulté.
+  *
+  * @param difficulte la nouvelle difficulté du jeu
+  */
+ public void reinitialiser(Difficulte difficulte){
+  this.difficulte = difficulte;
+  initialisationVariables();
+  vue.initialisation(plateau, this);
+  gestionnaireSouris();
+ }
 
-	public void gestionnaireSouris(){
-		for (int i = 0; i < plateau.lignes; i++){
-			for (int j = 0; j < plateau.colonnes; j++){
-				vue.gestionnaireSouris(new GestionnaireDisque(this), vue.boutton[i][j]);
-			}
-		}
-		vue.gestionnaireSouris(new GestionnaireAnnuler(this), vue.bouttonAnnuler);
-		vue.gestionnaireSouris(new GestionnaireRefaire(this), vue.bouttonRefaire);
-		vue.gestionnaireSouris(new GestionnaireAbandon(this), vue.abandonBlanc);
-		vue.gestionnaireSouris(new GestionnaireAbandon(this), vue.abandonNoir);
-		vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.FACILE),   vue.nouvellePartieFacile);
-		vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.MOYEN), vue.nouvellePartieMoyenne);
-		vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.DIFFICILE),   vue.nouvellePartieDifficile);
+ /**
+  * Initialise les variables du jeu.
+  */
+ public void initialisationVariables(){
+  plateau = new Plateau(lignes, colonnes);
+  manageur = new Manageur();
+ }
 
-	}
-	
+ /**
+  * Gère les événements de la souris.
+  */
+ public void gestionnaireSouris(){
+  for (int i = 0; i < plateau.lignes; i++){
+   for (int j = 0; j < plateau.colonnes; j++){
+    vue.gestionnaireSouris(new GestionnaireDisque(this), vue.boutton[i][j]);
+   }
+  }
+  vue.gestionnaireSouris(new GestionnaireAnnuler(this), vue.bouttonAnnuler);
+  vue.gestionnaireSouris(new GestionnaireRefaire(this), vue.bouttonRefaire);
+  vue.gestionnaireSouris(new GestionnaireAbandon(this), vue.abandonBlanc);
+  vue.gestionnaireSouris(new GestionnaireAbandon(this), vue.abandonNoir);
+  vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.FACILE),   vue.nouvellePartieFacile);
+  vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.MOYEN), vue.nouvellePartieMoyenne);
+  vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.DIFFICILE),   vue.nouvellePartieDifficile);
+ }
 
-	public void tourOrdi(){
-		if (difficulte == Difficulte.FACILE)
-			ordiFacile();
-		else if (difficulte == Difficulte.MOYEN)
-			ordiMoyen();
-		else if (difficulte == Difficulte.DIFFICILE)
-			ordiDifficile();
-	}
-	
+ /**
+  * Gère le tour de l'ordinateur en fonction de la difficulté du jeu.
+  */
+ public void tourOrdi(){
+  if (difficulte == Difficulte.FACILE)
+   ordiFacile();
+  else if (difficulte == Difficulte.MOYEN)
+   ordiMoyen();
+  else if (difficulte == Difficulte.DIFFICILE)
+   ordiDifficile();
+ }
 
-	public void ordiFacile(){
-		while (plateau.tourJoueur == Couleur.BLANC && !plateau.jeuTermine){
-			StrategieAleatoire randomStrategy = new StrategieAleatoire(this);
-			try{
-				Thread.sleep(300);
-			}
-			catch (InterruptedException interruptedException) {
-				System.out.println("Erreur");
-			}
-			plateau = randomStrategy.mouvement(plateau);
-		}
-	}
+ /**
+  * Gère le tour de l'ordinateur en mode facile.
+  */
+ public void ordiFacile(){
+  while (plateau.tourJoueur == Couleur.BLANC && !plateau.jeuTermine){
+   StrategieAleatoire randomStrategy = new StrategieAleatoire(this);
+   try{
+    Thread.sleep(300);
+   }
+   catch (InterruptedException interruptedException) {
+    System.out.println("Erreur");
+   }
+   plateau = randomStrategy.mouvement(plateau);
+  }
+ }
 
+ /**
+  * Gère le tour de l'ordinateur en mode moyen.
+  */
+ public void ordiMoyen(){
+  while (plateau.tourJoueur == Couleur.BLANC && !plateau.jeuTermine){
+   Minimax minimax = new Minimax(this);
+   try{
+    Thread.sleep(300);
+   }
+   catch (InterruptedException interruptedException) {
+    System.out.println("Erreur");
+   }
+   plateau = minimax.mouvement(plateau);
+  }
+ }
 
-	public void ordiMoyen(){
-		while (plateau.tourJoueur == Couleur.BLANC && !plateau.jeuTermine){
-			Minimax minimax = new Minimax(this);
-			try{
-				Thread.sleep(300);
-			}
-			catch (InterruptedException interruptedException) {
-				System.out.println("Erreur");
-			}
-			plateau = minimax.mouvement(plateau);
-		}
-	}
-	
-
-	public void ordiDifficile(){
-		while (plateau.tourJoueur == Couleur.BLANC && !plateau.jeuTermine){
-			AlphaBeta alphaBeta = new AlphaBeta(this);
-			plateau = alphaBeta.mouvement(plateau);
-		}
-	}
+ /**
+  * Gère le tour de l'ordinateur en mode difficile.
+  */
+ public void ordiDifficile(){
+  while (plateau.tourJoueur == Couleur.BLANC && !plateau.jeuTermine){
+   AlphaBeta alphaBeta = new AlphaBeta(this);
+   plateau = alphaBeta.mouvement(plateau);
+  }
+ }
 }

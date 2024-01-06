@@ -9,18 +9,36 @@ import composants_principaux.Commande;
 import composants_principaux.Controleur;
 
 
+/**
+ * La classe AlphaBeta implémente la stratégie de recherche alpha-bêta pour le jeu.
+ * Elle étend la classe Strategie.
+ */
 public class AlphaBeta extends Strategie {
 
+	// La profondeur de recherche de l'algorithme
 	public int profondeur = 7;
-	
-	public int noeudsExplores = 0;
-	
 
+	// Le nombre de nœuds explorés par l'algorithme
+	public int noeudsExplores = 0;
+
+
+	/**
+	 * Constructeur de la classe AlphaBeta.
+	 * Initialise la stratégie avec le contrôleur donné.
+	 *
+	 * @param controleur le contrôleur du jeu
+	 */
 	public AlphaBeta(Controleur controleur){
 		super(controleur);
 	}
 
 
+	/**
+	 * Effectue un mouvement sur le plateau en utilisant l'algorithme alpha-bêta.
+	 *
+	 * @param plateau le plateau de jeu
+	 * @return le plateau après le mouvement
+	 */
 	public Plateau mouvement(Plateau plateau){
 		if (plateau.tour >= 48)
 			profondeur = 60;
@@ -49,8 +67,18 @@ public class AlphaBeta extends Strategie {
 		
 		return plateau;
 	}
-	
 
+
+	/**
+	 * Implémente l'algorithme de recherche alpha-bêta.
+	 *
+	 * @param plateau le plateau de jeu
+	 * @param niveauActuel le niveau actuel de l'arbre de recherche
+	 * @param profondeurMax la profondeur maximale de l'arbre de recherche
+	 * @param alpha la valeur alpha pour l'algorithme alpha-bêta
+	 * @param beta la valeur bêta pour l'algorithme alpha-bêta
+	 * @return le meilleur plateau après la recherche
+	 */
 	public Plateau alphaBeta(Plateau plateau, int niveauActuel, int profondeurMax, int alpha, int beta){
 		if (plateau.jeuTermine || (niveauActuel == profondeurMax))
 			return plateau;

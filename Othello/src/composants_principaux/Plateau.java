@@ -3,9 +3,12 @@ package composants_principaux;
 import java.awt.Point;
 import java.util.ArrayList;
 
-
+/**
+ * La classe Plateau représente le plateau de jeu.
+ * Elle contient un tableau de disques, les joueurs, le tour du joueur, le gagnant et le nombre de tours.
+ */
 public class Plateau {
-	/* Essential Info */
+
 	public final int lignes;
 	public final int colonnes;
 	public Disque[][] othellier;
@@ -19,8 +22,15 @@ public class Plateau {
 	public boolean jeuTermine;
 	public Couleur gagnant;
 	public int tour;
-	
 
+
+	/**
+	 * Constructeur de la classe Plateau.
+	 * Initialise les lignes, les colonnes, le tableau de disques, les joueurs, le tour du joueur, le jeu terminé, le gagnant et le tour.
+	 *
+	 * @param lignes le nombre de lignes du plateau
+	 * @param colonnes le nombre de colonnes du plateau
+	 */
 	public Plateau(int lignes, int colonnes){
 
 		this.lignes = lignes;
@@ -39,8 +49,14 @@ public class Plateau {
 		gagnant = null;
 		tour = 1;
 	}
-	
 
+
+	/**
+	 * Constructeur de copie de la classe Plateau.
+	 * Crée un nouveau plateau avec les mêmes attributs que le plateau donné.
+	 *
+	 * @param autrePlateau le plateau à copier
+	 */
 	public Plateau(Plateau autrePlateau){
 
 		lignes = autrePlateau.lignes;
@@ -61,8 +77,11 @@ public class Plateau {
 		gagnant = autrePlateau.gagnant;
 		tour = autrePlateau.tour;
 	}
-	
 
+
+	/**
+	 * Initialise le plateau de jeu.
+	 */
 	public void initialisationPlateau(){
 		for (int lig = 0; lig < lignes; lig++){
 			for (int col = 0; col < colonnes; col++){
@@ -80,18 +99,36 @@ public class Plateau {
 		othellier[centreRondBas][centreRondHaut].changerCouleur(Couleur.BLANC);
 		othellier[centreRondHaut][centreRondBas].changerCouleur(Couleur.BLANC);
 	}
-	
 
+
+	/**
+	 * Vérifie si la position est valide sur le plateau.
+	 *
+	 * @param pos la position à vérifier
+	 * @return vrai si la position est valide, faux sinon
+	 */
 	public boolean positionValide(Point pos){
 		return (pos.x >= 0 && pos.y >= 0 && pos.x < colonnes && pos.y < lignes);
 	}
-	
 
+
+	/**
+	 * Retourne la couleur du disque à la position donnée.
+	 *
+	 * @param pos la position du disque
+	 * @return la couleur du disque à la position donnée
+	 */
 	public Couleur couleurDisque(Point pos){
 		return othellier[pos.y][pos.x].couleur;
 	}
-	
 
+
+	/**
+	 * Retourne la couleur de l'adversaire de la couleur donnée.
+	 *
+	 * @param couleur la couleur du joueur
+	 * @return la couleur de l'adversaire
+	 */
 	public Couleur getCouleurAdverse(Couleur couleur){
 		if (couleur == Couleur.NOIR)
 			return Couleur.BLANC;
@@ -99,8 +136,11 @@ public class Plateau {
 			return Couleur.NOIR;
 		return null;
 	}
-	
 
+
+	/**
+	 * Met à jour le tour du joueur.
+	 */
 	public void MiseAJourTour(){
 		if (tourJoueur == Couleur.BLANC && !joueurNoir.mouvementsValides.isEmpty())
 			tourJoueur = Couleur.NOIR;
@@ -108,8 +148,11 @@ public class Plateau {
 			tourJoueur = Couleur.BLANC;
 		tour = joueurNoir.score + joueurBlanc.score - 3;
 	}
-	
 
+
+	/**
+	 * Met à jour le statut du jeu.
+	 */
 	public void miseAJourStatutJeu(){
 		if (joueurNoir.mouvementsValides.isEmpty() && joueurBlanc.mouvementsValides.isEmpty()){
 			jeuTermine = true;
@@ -121,16 +164,26 @@ public class Plateau {
 				gagnant = Couleur.VIDE;
 		}
 	}
-	
 
+
+	/**
+	 * Met à jour le tableau de jeu.
+	 */
 	public void miseAJourTableau(){
 		joueurNoir.miseAJourMouvements(this);
 		joueurBlanc.miseAJourMouvements(this);
 		MiseAJourTour();
 		miseAJourStatutJeu();
 	}
-	
 
+
+	/**
+	 * Vérifie si le mouvement est valide pour la couleur donnée à la position donnée.
+	 *
+	 * @param pos la position du mouvement
+	 * @param couleur la couleur du joueur
+	 * @return vrai si le mouvement est valide, faux sinon
+	 */
 	public boolean mouvementValide(Point pos, Couleur couleur){
 		if (pos == null || couleur == null || !positionValide(pos) || couleur == Couleur.VIDE || othellier[pos.y][pos.x].couleur != Couleur.VIDE)
 			return false;
@@ -153,8 +206,17 @@ public class Plateau {
 			return true;
 		return false;
 	}
-	
 
+
+	/**
+	 * Vérifie si le mouvement est valide dans toutes les directions pour la couleur donnée à la position donnée.
+	 *
+	 * @param position la position du mouvement
+	 * @param couleur la couleur du joueur
+	 * @param xDirection la direction x
+	 * @param yDirection la direction y
+	 * @return vrai si le mouvement est valide dans toutes les directions, faux sinon
+	 */
 	public boolean valideDansToutesLesDirections(Point position, Couleur couleur, int xDirection, int yDirection){
 		Point pos = new Point(position);
 		Couleur opponentCouleur = getCouleurAdverse(couleur);
@@ -178,8 +240,13 @@ public class Plateau {
 		}
 		return false;
 	}
-	
 
+
+	/**
+	 * Retire le disque à la position donnée.
+	 *
+	 * @param pos la position du disque à retirer
+	 */
 	public void retirerDisque(Point pos){
 		Couleur oldCouleur = othellier[pos.y][pos.x].couleur;
 		othellier[pos.y][pos.x].changerCouleur(Couleur.VIDE);
@@ -190,8 +257,14 @@ public class Plateau {
 		else if (oldCouleur == Couleur.BLANC)
 			joueurBlanc.score--;
 	}
-	
 
+
+	/**
+	 * Retourne le disque à la position donnée avec la nouvelle couleur.
+	 *
+	 * @param pos la position du disque à retourner
+	 * @param nouvelleCouleur la nouvelle couleur du disque
+	 */
 	public void retournerDisque(Point pos, Couleur nouvelleCouleur){
 		Couleur ancienneCouleur = othellier[pos.y][pos.x].couleur;
 		othellier[pos.y][pos.x].changerCouleur(nouvelleCouleur);
@@ -208,8 +281,15 @@ public class Plateau {
 		else if (nouvelleCouleur == Couleur.BLANC)
 			joueurBlanc.score++;
 	}
-	
 
+
+	/**
+	 * Retourne les disques capturés à la position donnée pour la couleur donnée.
+	 *
+	 * @param pos la position du disque
+	 * @param couleur la couleur du joueur
+	 * @return la liste des points des disques capturés
+	 */
 	public ArrayList<Point> retournerCaptures(Point pos, Couleur couleur){
 		ArrayList<Point> disquesRetournes = new ArrayList<Point>();
 		ArrayList<Point> disquesRetournesDansDirection = new ArrayList<Point>();
@@ -234,8 +314,15 @@ public class Plateau {
 		disquesRetournes.addAll(disquesRetournesDansDirection);
 		return disquesRetournes;
 	}
-	
 
+
+	/**
+	 * Retourne les disques capturés à la position donnée pour la couleur donnée.
+	 *
+	 * @param position la position du disque
+	 * @param couleur la couleur du joueur
+	 * @return la liste des points des disques capturés
+	 */
 	public ArrayList<Point> retourneDansDirection(Point position, Couleur couleur, int xDirection, int yDirection){
 		ArrayList<Point> disquesRetournes = new ArrayList<Point>();
 		Point pos = new Point(position);
@@ -252,23 +339,41 @@ public class Plateau {
 		}
 		return disquesRetournes;
 	}
-	
 
+
+
+	/**
+	 * Place un disque à la position donnée pour la couleur donnée.
+	 *
+	 * @param pos la position du disque à placer
+	 * @param couleur la couleur du disque à placer
+	 */
 	public void placerDisque(Point pos, Couleur couleur){
 		retournerDisque(pos, couleur);
 		retournerCaptures(pos, couleur);
 		miseAJourTableau();
 	}
-	
 
+
+	/**
+	 * Retourne le joueur actuel.
+	 *
+	 * @return le joueur actuel
+	 */
 	public Joueur getJoueurActuel(){
 		if (tourJoueur == Couleur.NOIR)
 			return joueurNoir;
 		else
 			return joueurBlanc;
 	}
-	
 
+
+	/**
+	 * Compte le nombre de cases X occupées par la couleur donnée.
+	 *
+	 * @param couleur la couleur du joueur
+	 * @return le nombre de cases X occupées
+	 */
 	public int xCasesOccupees(Couleur couleur){
 		int mauvaisesCases = 0;
 		if (couleurDisque(new Point(1, 1)) == couleur)
@@ -281,8 +386,14 @@ public class Plateau {
 			mauvaisesCases++;
 		return mauvaisesCases;
 	}
-	
 
+
+	/**
+	 * Compte le nombre de mauvaises cases X occupées par la couleur donnée.
+	 *
+	 * @param couleur la couleur du joueur
+	 * @return le nombre de mauvaises cases X occupées
+	 */
 	public int mauvaisesXCasesOccupees(Couleur couleur){
 		int mauvaisesCases = 0;
 		if ((couleurDisque(new Point(1, 1)) == couleur) && (couleurDisque(new Point(0, 0)) == Couleur.VIDE))
@@ -295,8 +406,14 @@ public class Plateau {
 			mauvaisesCases++;
 		return mauvaisesCases;
 	}
-	
 
+
+	/**
+	 * Compte le nombre de cases C occupées par la couleur donnée.
+	 *
+	 * @param couleur la couleur du joueur
+	 * @return le nombre de cases C occupées
+	 */
 	public int cCasesOccupees(Couleur couleur){
 		int cCases = 0;
 		
@@ -322,8 +439,14 @@ public class Plateau {
 		
 		return cCases;
 	}
-	
 
+
+	/**
+	 * Compte le nombre de mauvaises cases C occupées par la couleur donnée.
+	 *
+	 * @param couleur la couleur du joueur
+	 * @return le nombre de mauvaises cases C occupées
+	 */
 	public int mauvaisesCCasesOccupees(Couleur couleur){
 		int cCases = 0;
 		
@@ -349,8 +472,14 @@ public class Plateau {
 		
 		return cCases;
 	}
-	
 
+
+	/**
+	 * Compte le nombre de coins occupés par la couleur donnée.
+	 *
+	 * @param couleur la couleur du joueur
+	 * @return le nombre de coins occupés
+	 */
 	public int coinsOccupes(Couleur couleur){
 		int coins = 0;
 		if (couleurDisque(new Point(0, 0)) == couleur)
@@ -363,8 +492,13 @@ public class Plateau {
 			coins++;
 		return coins;
 	}
-	
 
+
+	/**
+	 * Retourne une représentation en chaîne de caractères du plateau.
+	 *
+	 * @return une représentation en chaîne de caractères du plateau
+	 */
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
