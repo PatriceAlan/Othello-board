@@ -15,14 +15,16 @@ public class Vue {
 	public JFrame frame;
 	public JPanel panel;
 	public Bouton[][] bouton;
+
+	public JButton boutonJeuIA;
 	
 	public int hauteurFrame;
 	public int largeurFrame;
 	public int largeurPlateau;
 	public int largeurCase;
 	
-	public JButton bouttonAnnuler;
-	public JButton bouttonRefaire;
+	public JButton boutonAnnuler;
+	public JButton boutonRefaire;
 
 	public JTextField nomBlanc;
 	public JTextField nomNoir;
@@ -63,6 +65,7 @@ public class Vue {
 		largeurFrame = 917;
 		largeurPlateau = 600;
 		largeurCase = largeurPlateau / plateau.lignes;
+
 
 
 
@@ -125,7 +128,12 @@ public class Vue {
 				panel.add(boutonActuel);
 			}
 		}
-		creationBouttonsInterface(panel);
+
+		boutonJeuIA = new JButton("IA vs IA");
+		boutonJeuIA.setBounds(610, 200, 150, 40);
+		panel.add(boutonJeuIA);
+
+		creationBoutonsInterface(panel);
 		miseAjourVue();
 		
 		frame.setContentPane(panel);
@@ -156,14 +164,14 @@ public class Vue {
 	 *
 	 * @param panel le panneau sur lequel ajouter les boutons
 	 */
-	public void creationBouttonsInterface(JPanel panel){
+	public void creationBoutonsInterface(JPanel panel){
 		creationNoms(panel);
 		creationVictoires(panel);
-		createNumDisks(panel);
-		creationBouttonAnnuler(panel);
-		creationBouttonRefaire(panel);
-		cerationBouttonAbandon(panel);
-		createNewGameButtons(panel);
+		creationNombreDisques(panel);
+		creationBoutonAnnuler(panel);
+		creationBoutonRefaire(panel);
+		cerationBoutonAbandon(panel);
+		creationNouveauBoutonNouvellePartie(panel);
 		creationTexteDifficulte(panel);
 	}
 
@@ -198,7 +206,7 @@ public class Vue {
 	}
 	
 
-	public void createNumDisks(JPanel panel){
+	public void creationNombreDisques(JPanel panel){
 		disquesBlanc = new JTextField("Disques Blancs: " + plateau.joueurBlanc.score);
 		disquesBlanc.setBounds(610, 470, 100, 40);
 		disquesBlanc.setEditable(false);
@@ -212,21 +220,21 @@ public class Vue {
 	}
 	
 
-	public void creationBouttonAnnuler(JPanel panel){
-		bouttonAnnuler = new JButton("Annuler");
-		bouttonAnnuler.setBounds(630, 250, 100, 40);
-		panel.add(bouttonAnnuler);
+	public void creationBoutonAnnuler(JPanel panel){
+		boutonAnnuler = new JButton("Annuler");
+		boutonAnnuler.setBounds(630, 250, 100, 40);
+		panel.add(boutonAnnuler);
 	}
 	
 
-	public void creationBouttonRefaire(JPanel panel){
-		bouttonRefaire = new JButton("Refaire");
-		bouttonRefaire.setBounds(630, 310, 100, 40);
-		panel.add(bouttonRefaire);
+	public void creationBoutonRefaire(JPanel panel){
+		boutonRefaire = new JButton("Refaire");
+		boutonRefaire.setBounds(630, 310, 100, 40);
+		panel.add(boutonRefaire);
 	}
 	
 
-	public void cerationBouttonAbandon(JPanel panel){
+	public void cerationBoutonAbandon(JPanel panel){
 		abandonBlanc = new JButton("Blanc abandonne");
 		abandonBlanc.setBounds(720, 485, 150, 30);
 		panel.add(abandonBlanc);
@@ -236,7 +244,7 @@ public class Vue {
 	}
 	
 
-	public void createNewGameButtons(JPanel panel){
+	public void creationNouveauBoutonNouvellePartie(JPanel panel){
 		nouvellePartieFacile = new JButton("Nouvelle partie - FACILE");
 		nouvellePartieFacile.setBounds(10, 660, 180, 30);
 		panel.add(nouvellePartieFacile);
@@ -331,8 +339,8 @@ public class Vue {
 	 * @param activer vrai pour activer les boutons, faux pour les désactiver
 	 */
 	public void activerBouttons(Boolean activer){
-		bouttonRefaire.setEnabled(activer);
-		bouttonAnnuler.setEnabled(activer);
+		boutonRefaire.setEnabled(activer);
+		boutonAnnuler.setEnabled(activer);
 		abandonNoir.setEnabled(activer);
 		abandonBlanc.setEnabled(activer);
 	}
