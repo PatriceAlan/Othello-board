@@ -9,6 +9,7 @@ import composants_principaux.Commande;
 import composants_principaux.Controleur;
 
 
+
 /**
  * La classe AlphaBeta implémente la stratégie de recherche alpha-bêta pour le jeu.
  * Elle étend la classe Strategie.
