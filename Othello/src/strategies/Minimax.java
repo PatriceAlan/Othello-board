@@ -33,12 +33,22 @@ public class Minimax extends Strategie {
   * @return le plateau après le mouvement
   */
  public Plateau mouvement(Plateau plateau){
+  long tempsDebut = System.currentTimeMillis();
   Plateau plateauSuccesseur = minimax(plateau, 0, profondeur);
+  long tempsFin = System.currentTimeMillis();
+
+  double duree = (tempsFin - tempsDebut) / 1000.0;
+  System.out.println("Tour " + plateau.tour + "\n------\nMinimax Temps mouvement = " + duree + " secondes");
 
   Commande commande = getCommande(plateau, plateauSuccesseur);
   manageur.executionCommande(commande);
 
   vue.miseAjourVue();
+
+  Utilite utilite = new Utilite(plateauSuccesseur);
+  utilite.utiliteCoins();
+  System.out.println("Complexité utilité = " + utilite.value + "\n");
+
   return plateau;
  }
 

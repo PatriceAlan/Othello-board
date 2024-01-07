@@ -1,10 +1,6 @@
 package composants_principaux;
 
-import gestionnaires.GestionnaireAbandon;
-import gestionnaires.GestionnaireNouvellePartie;
-import gestionnaires.GestionnaireDisque;
-import gestionnaires.GestionnaireRefaire;
-import gestionnaires.GestionnaireAnnuler;
+import gestionnaires.*;
 import strategies.Minimax;
 import strategies.AlphaBeta;
 import strategies.Difficulte;
@@ -59,6 +55,23 @@ public class Controleur {
   gestionnaireSouris();
  }
 
+ public void lancerPartieIAvsIA(Difficulte difficulteIA1, Difficulte difficulteIA2) {
+  GestionnaireIAvsIA gestionnaireIAGame = new GestionnaireIAvsIA(this, difficulteIA1, difficulteIA2);
+  gestionnaireIAGame.execute();
+ }
+
+
+ private void jouerCoupIA(Difficulte difficulteIA) {
+  if (difficulteIA == Difficulte.FACILE)
+   ordiFacile();
+  else if (difficulteIA == Difficulte.MOYEN)
+   ordiMoyen();
+  else if (difficulteIA == Difficulte.DIFFICILE)
+   ordiDifficile();
+ }
+
+
+
  /**
   * Réinitialise le jeu avec une nouvelle difficulté.
   *
@@ -88,13 +101,15 @@ public class Controleur {
     vue.gestionnaireSouris(new GestionnaireDisque(this), vue.bouton[i][j]);
    }
   }
-  vue.gestionnaireSouris(new GestionnaireAnnuler(this), vue.bouttonAnnuler);
-  vue.gestionnaireSouris(new GestionnaireRefaire(this), vue.bouttonRefaire);
+  vue.gestionnaireSouris(new GestionnaireAnnuler(this), vue.boutonAnnuler);
+  vue.gestionnaireSouris(new GestionnaireRefaire(this), vue.boutonRefaire);
   vue.gestionnaireSouris(new GestionnaireAbandon(this), vue.abandonBlanc);
   vue.gestionnaireSouris(new GestionnaireAbandon(this), vue.abandonNoir);
   vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.FACILE),   vue.nouvellePartieFacile);
   vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.MOYEN), vue.nouvellePartieMoyenne);
   vue.gestionnaireSouris(new GestionnaireNouvellePartie(this, Difficulte.DIFFICILE),   vue.nouvellePartieDifficile);
+  vue.gestionnaireSouris(new GestionnaireIAvsIAMouseAdapter(this, Difficulte.MOYEN, Difficulte.DIFFICILE), vue.boutonJeuIA);
+
  }
 
  /**
@@ -108,6 +123,8 @@ public class Controleur {
   else if (difficulte == Difficulte.DIFFICILE)
    ordiDifficile();
  }
+
+
 
  /**
   * Gère le tour de l'ordinateur en mode facile.
